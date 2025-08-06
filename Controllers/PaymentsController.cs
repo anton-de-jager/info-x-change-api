@@ -12,21 +12,23 @@ namespace infoX.api.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public PaymentsController(AppDbContext context)
+        public PaymentsController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("ozow/{companyId}")]
+        [HttpGet("ozow")]
         [Authorize]
-        public async Task<IActionResult> GetOzow(int companyId)
+        public async Task<IActionResult> GetOzow()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.Payment
-                    .FromSqlRaw("EXEC [usp_payments_ozow] " + companyId.ToString())
+                    .FromSqlRaw("EXEC [usp_payments_ozow] " + companyId)
                     .ToListAsync();
 
                 return Ok(records);
@@ -37,14 +39,16 @@ namespace infoX.api.Controllers
             }
         }
 
-        [HttpPost("payfast/{companyId}")]
+        [HttpGet("payfast")]
         [Authorize]
-        public async Task<IActionResult> GetPayfast(int companyId)
+        public async Task<IActionResult> GetPayfast()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.Payment
-                    .FromSqlRaw("EXEC [usp_payments_payfast] " + companyId.ToString())
+                    .FromSqlRaw("EXEC [usp_payments_payfast] " + companyId)
                     .ToListAsync();
 
                 return Ok(records);

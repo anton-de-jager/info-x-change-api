@@ -12,22 +12,24 @@ namespace infoX.api.Controllers
     [ApiController]
     public class AgentProductivityController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public AgentProductivityController(AppDbContext context)
+        public AgentProductivityController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("{companyId}")]
+        [HttpGet("select")]
         [Authorize]
-        public async Task<IActionResult> GetByCompanyId(int companyId)
+        public async Task<IActionResult> Get()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.AgentProductivity
-                    .FromSqlRaw("SELECT * FROM agentProductivity WHERE companyID = " + companyId.ToString())
-                    .ToListAsync();
+                        .FromSqlRaw("SELECT * FROM agentProductivity WHERE companyID = " + companyId)
+                        .ToListAsync();
 
                 return Ok(records);
             }

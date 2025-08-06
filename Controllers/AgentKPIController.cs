@@ -12,21 +12,23 @@ namespace infoX.api.Controllers
     [ApiController]
     public class AgentKPIController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public AgentKPIController(AppDbContext context)
+        public AgentKPIController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("{companyId}")]
+        [HttpGet("select")]
         [Authorize]
-        public async Task<IActionResult> GetByCompanyId(int companyId)
+        public async Task<IActionResult> Get()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.AgentKPI
-                    .FromSqlRaw("SELECT * FROM agentKPI WHERE companyID = " + companyId.ToString())
+                    .FromSqlRaw("SELECT * FROM agentKPI WHERE companyID = " + companyId)
                     .ToListAsync();
 
                 return Ok(records);

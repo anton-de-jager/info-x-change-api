@@ -4,14 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace infoX.api.Data
 {
-    public class AppDbContext : DbContext
+    public class PegasusDataWarehouseDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public PegasusDataWarehouseDbContext(DbContextOptions<PegasusDataWarehouseDbContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<User2FACode> User2FACodes { get; set; }
-        public DbSet<ConfigColumn> ConfigColumns { get; set; }
-        public DbSet<ConfigTable> ConfigTables { get; set; }
         public DbSet<Abandoned> Abandoned { get; set; }
         public DbSet<AgentKPI> AgentKPI { get; set; }
         public DbSet<ActiveUsers> ActiveUsers { get; set; }
@@ -29,14 +25,6 @@ namespace infoX.api.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<User>().HasKey(u => u.ID);
-
-            modelBuilder.Entity<User2FACode>().ToTable("User2FACodes");
-
-            modelBuilder.Entity<ConfigColumn>().ToTable("ConfigColumn");
-            modelBuilder.Entity<ConfigTable>().ToTable("ConfigTable");
-
             modelBuilder.Entity<Abandoned>().HasNoKey();
             modelBuilder.Entity<AgentKPI>().HasNoKey();
             modelBuilder.Entity<AgentProductivity>().HasNoKey();

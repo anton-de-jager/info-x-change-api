@@ -12,21 +12,21 @@ namespace infoX.api.Controllers
     [ApiController]
     public class DashboardWhatsAppController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly WhatsAppDbContext _context;
 
-        public DashboardWhatsAppController(AppDbContext context)
+        public DashboardWhatsAppController(WhatsAppDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("dashboard/{companyId}/{interval}")]
+        [HttpGet("dashboard/{companyId}/{interval}")]
         [Authorize]
-        public async Task<IActionResult> GetByCompanyId(int companyId, string interval)
+        public async Task<IActionResult> Get(int companyId, string interval)
         {
             try
             {
                 var records = await _context.dashboardWhatsApp
-                    .FromSqlRaw("EXEC usp_dashboard_whatsApp " + companyId.ToString() + ", '" + interval + "';")
+                    .FromSqlRaw("EXEC usp_dashboard_whatsApp " + companyId + ", '" + interval + "';")
                     .ToListAsync();
 
                 return Ok(records);
@@ -37,14 +37,14 @@ namespace infoX.api.Controllers
             }
         }
 
-        [HttpPost("messages/{companyId}/{interval}")]
+        [HttpGet("messages/{companyId}/{interval}")]
         [Authorize]
         public async Task<IActionResult> GetMessages(int companyId, string interval)
         {
             try
             {
                 var records = await _context.VwMessages
-                    .FromSqlRaw("EXEC usp_dashboard_messages " + companyId.ToString() + ", '" + interval + "';")
+                    .FromSqlRaw("EXEC usp_dashboard_messages " + companyId + ", '" + interval + "';")
                     .ToListAsync();
 
                 return Ok(records);
@@ -55,14 +55,14 @@ namespace infoX.api.Controllers
             }
         }
 
-        [HttpPost("users/{companyId}/{interval}")]
+        [HttpGet("users/{companyId}/{interval}")]
         [Authorize]
         public async Task<IActionResult> GetUsers(int companyId, string interval)
         {
             try
             {
                 var records = await _context.VwMessages
-                    .FromSqlRaw("EXEC usp_dashboard_users " + companyId.ToString() + ", '" + interval + "';")
+                    .FromSqlRaw("EXEC usp_dashboard_users " + companyId + ", '" + interval + "';")
                     .ToListAsync();
 
                 return Ok(records);
@@ -73,14 +73,14 @@ namespace infoX.api.Controllers
             }
         }
 
-        [HttpPost("arrangements/{companyId}/{interval}")]
+        [HttpGet("arrangements/{companyId}/{interval}")]
         [Authorize]
         public async Task<IActionResult> GetArrangements(int companyId, string interval)
         {
             try
             {
                 var records = await _context.VwMessages
-                    .FromSqlRaw("EXEC usp_dashboard_arrangements " + companyId.ToString() + ", '" + interval + "';")
+                    .FromSqlRaw("EXEC usp_dashboard_arrangements " + companyId + ", '" + interval + "';")
                     .ToListAsync();
 
                 return Ok(records);

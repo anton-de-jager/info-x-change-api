@@ -12,21 +12,23 @@ namespace infoX.api.Controllers
     [ApiController]
     public class DebitOrderArrangementsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public DebitOrderArrangementsController(AppDbContext context)
+        public DebitOrderArrangementsController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("{companyId}")]
+        [HttpGet("select")]
         [Authorize]
-        public async Task<IActionResult> GetByCompanyId(int companyId)
+        public async Task<IActionResult> Get()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.DebitOrderArrangements
-                    .FromSqlRaw("SELECT * FROM debitOrderArrangements WHERE CompanyID = " + companyId.ToString())
+                    .FromSqlRaw("SELECT * FROM debitOrderArrangements WHERE CompanyID = " + companyId)
                     .ToListAsync();
 
                 return Ok(records);

@@ -12,21 +12,23 @@ namespace infoX.api.Controllers
     [ApiController]
     public class CallBackController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public CallBackController(AppDbContext context)
+        public CallBackController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("{companyId}")]
+        [HttpGet("select")]
         [Authorize]
-        public async Task<IActionResult> GetByCompanyId(int companyId)
+        public async Task<IActionResult> Get()
         {
             try
             {
+                var companyId = User.FindFirst("companyId")?.Value;
+
                 var records = await _context.CallBack
-                    .FromSqlRaw("SELECT * FROM callBack WHERE CompanyID = " + companyId.ToString())
+                    .FromSqlRaw("SELECT * FROM callBack WHERE CompanyID = " + companyId)
                     .ToListAsync();
 
                 return Ok(records);

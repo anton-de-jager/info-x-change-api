@@ -13,14 +13,14 @@ namespace infoX.api.Controllers
     [ApiController]
     public class TableController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusDataWarehouseDbContext _context;
 
-        public TableController(AppDbContext context)
+        public TableController(PegasusDataWarehouseDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("{tableName}/{companyId}")]
+        [HttpGet("{tableName}/{companyId}")]
         [Authorize]
         public async Task<IActionResult> GetByCompanyId(string tableName, string companyId)
         {

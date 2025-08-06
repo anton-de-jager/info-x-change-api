@@ -1,8 +1,10 @@
-﻿namespace infoX.api.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace infoX.api.Models
 {
     public class LoginRequest
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public string Email { get; set; } = default!;
+        public string Password { get; set; } = default!;
     }
 }

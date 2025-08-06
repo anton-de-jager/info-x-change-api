@@ -13,16 +13,16 @@ namespace infoX.api.Controllers
     [ApiController]
     public class ConfigController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly PegasusConfigurationDbContext _context;
 
-        public ConfigController(AppDbContext context)
+        public ConfigController(PegasusConfigurationDbContext context)
         {
             _context = context;
         }
 
-        [HttpPost("table/{id}")]
+        [HttpGet("table/{id}")]
         [Authorize]
-        public async Task<IActionResult> GetConfigTable(Guid id)
+        public async Task<IActionResult> GetConfigTable(int id)
         {
             var table = await _context.ConfigTables
                 .Where(c => c.Id == id)
@@ -31,9 +31,9 @@ namespace infoX.api.Controllers
             return Ok(table);
         }
 
-        [HttpPost("columns/{id}")]
+        [HttpGet("columns/{id}")]
         [Authorize]
-        public async Task<IActionResult> GetConfigColumns(Guid id)
+        public async Task<IActionResult> GetConfigColumns(int id)
         {
             var columns = await _context.ConfigColumns
                 .Where(c => c.ConfigTableId == id)
